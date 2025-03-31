@@ -17,6 +17,7 @@ class Project extends Model
         'status',
         'priority',
         'progress',
+        'user_id'
     ];
 
     const ROLE_ADMIN = 'admin';
@@ -32,6 +33,13 @@ class Project extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+
 
     public function calculateProgress()
     {
