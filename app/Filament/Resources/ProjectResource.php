@@ -38,7 +38,7 @@ class ProjectResource extends Resource
                     ->date(),
                 Select::make('status')
                     ->options([
-                        'pending' => 'Pending',
+                        'active' => 'Pending',
                         'in progress' => 'In Progress',
                         'completed' => 'Completed',
                     ])

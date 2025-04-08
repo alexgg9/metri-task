@@ -27,6 +27,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->passwordReset()
+            ->profile()
             ->brandLogo(asset('images/logo.svg'))
             ->favicon(asset('images/logo.svg'))
             ->brandName('MetriTask')

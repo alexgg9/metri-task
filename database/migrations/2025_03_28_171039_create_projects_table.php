@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); 
-            $table->text('description');  
-            $table->date('start_date');    
-            $table->date('end_date');        
-            $table->enum('status', ['active', 'completed', 'in progress'])->default('active'); 
+            $table->string('name');
+            $table->text('description');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->enum('status', ['active', 'completed', 'in progress'])->default('active');
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
             $table->integer('progress')->default(0);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');

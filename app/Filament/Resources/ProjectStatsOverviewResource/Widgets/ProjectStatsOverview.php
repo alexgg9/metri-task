@@ -16,11 +16,11 @@ class ProjectStatsOverview extends BaseWidget
             Stat::make('Proyectos totales', Project::count())
                 ->description('Todos los proyectos creados')
                 ->color('primary'),
-    
+
             Stat::make('Tareas completadas', Task::where('status', 'completed')->count())
                 ->description('Tareas que ya se han completado')
                 ->color('success'),
-    
+
             Stat::make('Tareas pendientes', Task::where('status', 'pending')->count())
                 ->description('Aún por hacer')
                 ->color('warning'),
