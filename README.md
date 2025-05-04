@@ -45,6 +45,11 @@ Los permisos se usan en conjunto con políticas de acceso en Filament.
 - `TaskResource` → CRUD de tareas
 - `UserResource` → Gestión de usuarios
 
+  ![projects](https://github.com/user-attachments/assets/c70cc53c-a01e-45d9-a3d9-ccd3f98afb3d)
+![urser](https://github.com/user-attachments/assets/2a9a8ab9-d72d-4cb8-b037-d9a966d75d61)
+![task](https://github.com/user-attachments/assets/26b966aa-ee3c-49f5-9dcd-8f99ef17c830)
+
+
 ### Filament Widgets:
 
 - `ProjectStatsOverview` → Estadísticas generales:
@@ -57,7 +62,7 @@ Los permisos se usan en conjunto con políticas de acceso en Filament.
 
   - Comparativa tareas completadas vs pendientes
 -  `LineChart` → Crecimiento de proyectos diarios
-
+  
 ---
 
 ## 📊 Estadísticas del dashboard
@@ -72,6 +77,7 @@ El dashboard principal incluye un resumen de métricas:
 
 Además, pueden mostrarse **gráficos dinámicos** utilizando los widgets de charts de Filament para representar visualmente los datos.
 
+![dashboard](https://github.com/user-attachments/assets/d6bfedc5-aa80-479d-a7b2-6d3f5cb13500)
 ---
 
 ## 🧩 Dependencias principales
