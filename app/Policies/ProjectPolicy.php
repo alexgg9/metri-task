@@ -43,4 +43,9 @@ class ProjectPolicy
     {
         return $user->role === 'admin';
     }
+
+    public function viewAny(User $user)
+    {
+        return in_array($user->role, ['manager', 'admin']);
+    }
 }

@@ -17,7 +17,8 @@ class Project extends Model
         'status',
         'priority',
         'progress',
-        'user_id'
+        'user_id',
+        
     ];
 
     const ROLE_ADMIN = 'admin';
@@ -45,8 +46,13 @@ class Project extends Model
     {
         $completedTasks = $this->tasks()->where('status', 'completed')->count();
         $totalTasks = $this->tasks()->count();
-
-        return $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
+        
+        $progress = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
+        
+        $this->progress = round($progress);
+        $this->save();
+        
+        return $this->progress;
     }
 
     public static function getAvailableRoles()

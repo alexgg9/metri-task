@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\UserController;
 
 
 /*
@@ -28,7 +29,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return response()->json($request->user());
     });
+    Route::put('/user/{id}', [App\Http\Controllers\Api\UserController::class, 'update']);
 
     Route::apiResource('projects', ProjectController::class);
+    Route::get('projects/{project}/tasks', [ProjectController::class, 'getProjectTasks']);
     Route::apiResource('tasks', TaskController::class);
 });
