@@ -25,10 +25,22 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        
+
         $validated = $request->validated();
         $task = Task::create($validated);
         return response()->json($task, 201);
+    }
+
+    /**
+     * Get tasks by project ID
+     */
+    public function getTasksByProject(string $projectId)
+    {
+        $tasks = Task::with('user')
+            ->where('project_id', $projectId)
+            ->get();
+
+        return response()->json($tasks);
     }
 
     /**
@@ -47,7 +59,7 @@ class TaskController extends Controller
      */
     public function update(TaskRequest $request, string $id)
     {
-        
+
         $task = Task::findOrFail($id);
         $task->update($request->all());
         return response()->json($task);
@@ -58,8 +70,8 @@ class TaskController extends Controller
      */
     public function destroy(string $id)
     {
-        $task = Task::findOrFail($id); 
-        $task->delete(); 
+        $task = Task::findOrFail($id);
+        $task->delete();
 
         return response()->json(null, 204);
     }

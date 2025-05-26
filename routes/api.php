@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json($request->user());
     });
     Route::put('/user/{id}', [App\Http\Controllers\Api\UserController::class, 'update']);
+    Route::get('/projects/{id}', [ProjectController::class, 'show']);
 
     Route::apiResource('projects', ProjectController::class);
     Route::get('projects/{project}/tasks', [ProjectController::class, 'getProjectTasks']);

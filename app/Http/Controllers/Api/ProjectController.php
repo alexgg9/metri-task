@@ -39,9 +39,10 @@ class ProjectController extends Controller
         return response()->json($project);
     }
 
-    public function show(Project $project)
+    public function show($id)
     {
-        $this->authorize('view', $project);
+        $project = Project::with(['creator', 'tasks', 'users'])->findOrFail($id);
+        $this->authorize('viewAny', $project);
         return response()->json($project);
     }
 
