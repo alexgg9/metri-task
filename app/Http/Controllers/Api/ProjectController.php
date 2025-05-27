@@ -27,7 +27,6 @@ class ProjectController extends Controller
     {
         $this->authorize('create', Project::class);
         $project = Project::create($request->validated());
-
         return response()->json($project, 201);
     }
 

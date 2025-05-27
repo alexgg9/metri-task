@@ -17,7 +17,7 @@ class ProjectPolicy
 
     public function create(User $user)
     {
-        return in_array($user->role, ['manager', 'admin']);
+        return $user->role === 'manager' || $user->role === 'admin';
     }
 
     /**

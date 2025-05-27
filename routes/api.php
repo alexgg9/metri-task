@@ -32,7 +32,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/{id}', [App\Http\Controllers\Api\UserController::class, 'update']);
     Route::get('/projects/{id}', [ProjectController::class, 'show']);
 
-    Route::apiResource('projects', ProjectController::class);
-    Route::get('projects/{project}/tasks', [ProjectController::class, 'getProjectTasks']);
+    Route::get('/projects', [ProjectController::class, 'index']);
+    Route::post('/projects', [ProjectController::class, 'store']);
+    Route::put('/projects/{id}', [ProjectController::class, 'update']);
+    Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
+
+    Route::get('projects/{id}/tasks', [ProjectController::class, 'getProjectTasks']);
     Route::apiResource('tasks', TaskController::class);
 });
