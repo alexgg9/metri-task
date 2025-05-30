@@ -22,11 +22,11 @@ class TaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255', 
-            'description' => 'nullable|string', 
-            'status' => 'required|string|in:pending,in_progress,completed',
-            'priority' => 'required|string|in:low,medium,high', 
-            'due_date' => 'nullable|date', 
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'required|string|in:pending,in progress,completed',
+            'priority' => 'required|string|in:low,medium,high',
+            'due_date' => 'nullable|date',
             'project_id' => 'required|exists:projects,id',
             'user_id' => 'required|exists:users,id',
         ];
