@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskRequest;
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class TaskController extends Controller
 {
@@ -74,5 +77,51 @@ class TaskController extends Controller
         $task->delete();
 
         return response()->json(null, 204);
+    }
+
+    /**
+     * Obtiene todas las tareas del usuario autenticado
+     * Incluye tareas donde el usuario es creador o está asignado
+     */
+    public function getUserTasks()
+    {
+        try {
+            $user = auth()->user();
+            
+            if (!$user) {
+                return response()->json(['error' => 'Usuario no autenticado'], 401);
+            }
+            
+            // Asegurarse de que user_id y assigned_to sean números
+            $userId = (int) $user->id;
+            
+            // Obtener tareas donde el usuario es creador
+            $createdTasks = Task::where('user_id', $userId)
+                ->with(['user', 'project', 'assignedTo'])
+                ->get();
+            
+            // Obtener tareas donde el usuario está asignado
+            $assignedTasks = Task::where('assigned_to', $userId)
+                ->with(['user', 'project', 'assignedTo'])
+                ->get();
+            
+            // Combinar y eliminar duplicados
+            $allTasks = $createdTasks->concat($assignedTasks)->unique('id');
+            
+            return response()->json($allTasks);
+        } catch (\Exception $e) {
+            // Log detallado del error
+            \Illuminate\Support\Facades\Log::error('Error en getUserTasks:', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'error' => 'Error al obtener las tareas',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

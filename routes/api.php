@@ -36,4 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/projects/{projectId}/users', [UserController::class, 'getProjectUsers']);
     Route::post('/projects/{projectId}/users', [UserController::class, 'addUserToProject']);
     Route::delete('/projects/{projectId}/users/{userId}', [UserController::class, 'removeUserFromProject']);
+
+    Route::get('/user-tasks', [TaskController::class, 'getUserTasks']);
+    Route::get('/tasks/{id}', [TaskController::class, 'show']);
 });
