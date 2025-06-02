@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
+use App\Http\Requests\UpdateProjectRequest;
 
 
 class ProjectController extends Controller
@@ -30,13 +31,14 @@ class ProjectController extends Controller
         return response()->json($project, 201);
     }
 
-    public function update(ProjectRequest $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
         $this->authorize('update', $project);
         $project->update($request->validated());
 
         return response()->json($project);
     }
+
 
     public function show($id)
     {
@@ -45,13 +47,19 @@ class ProjectController extends Controller
         return response()->json($project);
     }
 
-    public function destroy(Project $project)
+    public function destroy($id)
     {
+        $project = Project::findOrFail($id);
 
-        $this->authorize('delete', $project);
+        if ($project->user_id !== auth()->id()) {
+            abort(403, 'No tienes permisos para eliminar este proyecto');
+        }
+
         $project->delete();
-        return response()->json(null, 204);
+
+        return response()->json(['message' => 'Proyecto eliminado']);
     }
+
 
     public function getProjectTasks(Project $project)
     {

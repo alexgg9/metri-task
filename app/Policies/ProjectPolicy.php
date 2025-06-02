@@ -33,16 +33,19 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project)
     {
-        return in_array($user->role, ['manager', 'admin']);
+        return $user->id === $project->user_id || $user->role === 'manager';
     }
+
+
 
     /**
      * Determine if the user can delete the project.
      */
     public function delete(User $user, Project $project)
     {
-        return $user->role === 'admin';
+        return $user->role === 'admin' || $user->id === $project->user_id;
     }
+
 
     public function viewAny(User $user)
     {
