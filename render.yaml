@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: metri-task
+    env: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: APP_NAME
+        value: MetriTask
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        fromService:
+          type: web
+          name: metri-task
+          property: host
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromService:
+          type: pserv
+          name: metri-task-db
+          property: host
+      - key: DB_PORT
+        value: 5432
+      - key: DB_DATABASE
+        fromService:
+          type: pserv
+          name: metri-task-db
+          property: database
+      - key: DB_USERNAME
+        fromService:
+          type: pserv
+          name: metri-task-db
+          property: username
+      - key: DB_PASSWORD
+        fromService:
+          type: pserv
+          name: metri-task-db
+          property: password
+
+  - type: pserv
+    name: metri-task-db
+    plan: free
+    env: postgres
+    disk:
+      name: data
+      mountPath: /var/lib/postgresql/data
+      sizeGB: 1
