@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Instalar dependencias del sistema necesarias para extensiones PHP
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -14,10 +14,14 @@ RUN apt-get update && apt-get install -y \
     zip \
     nginx
 
-# Limpiar caché de paquetes
+# Instalar Node.js y npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+
+# Limpiar caché
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instalar extensiones PHP requeridas por Laravel y PostgreSQL
+# Instalar extensiones PHP necesarias
 RUN docker-php-ext-install pdo_pgsql pdo_mysql mbstring exif pcntl bcmath intl gd zip
 
 # Instalar Composer
@@ -29,11 +33,14 @@ WORKDIR /var/www/html
 # Copiar archivos del proyecto
 COPY . .
 
-# Crear archivo .env a partir del ejemplo
-RUN cp .env.example .env
+# Crear archivo .env si no existe
+RUN cp .env.example .env || true
 
-# Instalar dependencias PHP con Composer
+# Instalar dependencias PHP
 RUN composer install --optimize-autoloader --no-dev
+
+# Instalar dependencias JS y compilar assets con Vite
+RUN npm install && npm run build
 
 # Generar clave de la aplicación
 RUN php artisan key:generate
@@ -43,11 +50,11 @@ RUN php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache
 
-# Asignar permisos a Laravel
+# Permisos
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Exponer el puerto 8000
+# Exponer puerto 8000
 EXPOSE 8000
 
-# Iniciar servidor Laravel
+# Iniciar servidor
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
