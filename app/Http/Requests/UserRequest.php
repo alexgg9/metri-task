@@ -29,7 +29,7 @@ class UserRequest extends FormRequest
             'phone' => 'nullable|string|max:15',
             'address' => 'nullable|string|max:255',
             'birthdate' => 'nullable|date',
-            'role' => 'required|string|in:manager,member',
+            'role' => 'required|string|in:admin,manager,member',
         ];
     }
 }
