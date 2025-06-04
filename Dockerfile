@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     unzip \
     zip \
-    nginx
+    nginx \
+    postgresql-client
 
 # Instalar Node.js y npm
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
