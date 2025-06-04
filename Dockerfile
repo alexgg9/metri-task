@@ -42,22 +42,15 @@ RUN composer install --optimize-autoloader --no-dev
 # Instalar dependencias JS y compilar assets con Vite
 RUN npm install && npm run build
 
-# Generar clave de la aplicación
-RUN php artisan key:generate
-
-# Cachear configuración, rutas y vistas
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache
-
-# Ejecutar migraciones y seeders
-RUN php artisan migrate --force && php artisan db:seed --force
-
-# Permisos
+# Cambiar permisos para Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Exponer puerto 8000
+# Copiar entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Exponer puerto
 EXPOSE 8000
 
-# Iniciar servidor
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Usar entrypoint en tiempo de ejecución
+ENTRYPOINT ["/entrypoint.sh"]
