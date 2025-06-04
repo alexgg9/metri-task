@@ -8,6 +8,11 @@ done
 
 echo "Base de datos disponible. Ejecutando comandos de Laravel..."
 
+# Eliminar el constraint duplicado si existe (evita error en migraciones)
+echo "Eliminando constraint duplicado si existe..."
+PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d "$DB_DATABASE" -c \
+"ALTER TABLE project_user DROP CONSTRAINT IF EXISTS project_user_project_id_user_id_unique;"
+
 # Generar la clave de la aplicación (solo si no existe APP_KEY)
 if [ -z "$APP_KEY" ]; then
   php artisan key:generate
