@@ -13,16 +13,15 @@ RUN apt-get update && apt-get install -y \
     unzip \
     zip \
     nginx \
-    postgresql-client
+    postgresql-client && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Instalar Node.js y npm
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs
+    apt-get install -y nodejs && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Limpiar caché
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Instalar extensiones PHP necesarias
+# Instalar extensiones PHP
 RUN docker-php-ext-install pdo_pgsql pdo_mysql mbstring exif pcntl bcmath intl gd zip
 
 # Instalar Composer
@@ -37,21 +36,19 @@ COPY . .
 # Crear archivo .env si no existe
 RUN cp .env.example .env || true
 
-# Instalar dependencias PHP
-RUN composer install --optimize-autoloader --no-dev
+# Instalar dependencias PHP (como root, permitiendo superusuario)
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --optimize-autoloader --no-dev
 
-# Instalar dependencias JS y compilar assets con Vite
+# Instalar dependencias JS y compilar assets
 RUN npm install && npm run build
 
-# Cambiar permisos para Laravel
+# Ajustar permisos
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 # Copiar entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Exponer puerto
 EXPOSE 8000
 
-# Usar entrypoint en tiempo de ejecución
 ENTRYPOINT ["/entrypoint.sh"]
