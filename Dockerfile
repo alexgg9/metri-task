@@ -50,6 +50,9 @@ RUN php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache
 
+# Ejecutar migraciones y seeders
+RUN php artisan migrate --force && php artisan db:seed --force
+
 # Permisos
 RUN chown -R www-data:www-data storage bootstrap/cache
 
