@@ -17,26 +17,26 @@ class ProjectPolicy
 
     public function create(User $user)
     {
-        return $user->hasAnyRole(['manager', 'admin']);
+        return in_array($user->role, ['manager', 'admin']);
     }
 
     public function view(User $user, Project $project)
     {
-        return $user->hasRole('admin') || $project->users->contains($user);
+        return $user->role === 'admin' || $project->users->contains($user);
     }
 
     public function update(User $user, Project $project)
     {
-        return $user->hasRole('manager') || $user->id === $project->user_id;
+        return $user->role === 'manager' || $user->id === $project->user_id;
     }
 
     public function delete(User $user, Project $project)
     {
-        return $user->hasRole('admin') || $user->id === $project->user_id;
+        return $user->role === 'admin' || $user->id === $project->user_id;
     }
 
     public function viewAny(User $user)
     {
-        return $user->hasAnyRole(['manager', 'admin']);
+        return in_array($user->role, ['manager', 'admin']);
     }
 }
