@@ -6,6 +6,14 @@ until pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME"; do
   sleep 2
 done
 
+echo "Base de datos disponible. Reiniciando base de datos..."
+
+# Borrar todo el esquema (cuidado: esto elimina toda la base)
+PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d "$DB_DATABASE" -c "DROP SCHEMA public CASCADE;"
+PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d "$DB_DATABASE" -c "CREATE SCHEMA public;"
+
+echo "Esquema reiniciado correctamente."
+
 echo "Base de datos disponible. Ejecutando comandos de Laravel..."
 
 # Eliminar el constraint duplicado si existe (evita error en migraciones)

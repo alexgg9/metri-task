@@ -14,32 +14,32 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-            try {
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role,
+            ]);
 
-                $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'role' => $request->role,
-                ]);
+            // Generar un token de acceso para el usuario creado
+            $token = $user->createToken('auth_token', ['*'])->plainTextToken;
 
-                // Generar un token de acceso para el usuario creado
-                $token = $user->createToken('API TOKEN')->plainTextToken;
-
-                // Devolver una respuesta con el token generado
-                return response()->json([
-                    'status' => true,
-                    'message' => 'User created successfully',
-                    'token' => $token
-                ], 201);
-
-            } catch (\Exception $e) {
-                // Manejo de errores generales
-                return response()->json([
-                    'status' => false,
-                    'message' => 'User registration failed',
-                    'error' => $e->getMessage()
-                ], 500);
+            // Devolver una respuesta con el token generado
+            return response()->json([
+                'status' => true,
+                'message' => 'User created successfully',
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'user' => $user
+            ], 201);
+        } catch (\Exception $e) {
+            // Manejo de errores generales
+            return response()->json([
+                'status' => false,
+                'message' => 'User registration failed',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -51,7 +51,7 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token', ['*'])->plainTextToken;
 
         return response()->json([
             'access_token' => $token,
