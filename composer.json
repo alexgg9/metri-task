@@ -11,8 +11,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "saade/filament-fullcalendar": "^3.2",
-        "spatie/laravel-permission": "^6.16"
+        "saade/filament-fullcalendar": "^3.2"
     },
     "require-dev": {
         "beyondcode/laravel-er-diagram-generator": "^4.0",
