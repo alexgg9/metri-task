@@ -14,10 +14,7 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-
-        Role::firstOrCreate(['name' => 'admin']);
-
-        $user = User::updateOrCreate(
+        User::updateOrCreate(
             ['email' => 'admin@example.com'],
             [
                 'name' => 'Admin',
@@ -27,9 +24,8 @@ class AdminUserSeeder extends Seeder
                 'address' => 'Admin Street',
                 'birthdate' => '1990-01-01',
                 'avatar' => null,
+                'role' => 'admin', 
             ]
         );
-
-        $user->assignRole('admin');
     }
 }
